@@ -1,6 +1,4 @@
 package it.unibo.pps.tasks.monads
-
-import it.unibo.pps.u04.monads.Monads.Monad
 import it.unibo.pps.u04.monads.Monads.Monad
 
 /**
@@ -23,7 +21,7 @@ object Ex6TryModel:
 
   def success[A](value: A): Try[A] = TryImpl.Success(value)
   def failure[A](exception: Throwable): Try[A] = TryImpl.Failure(exception)
-  def exec[A](expression: => A): Try[A] = try success(expression) catch failure(_)
+  def exec[A](expression: => A): Try[A] = try success(expression) catch case e => failure(e)
 
   extension [A](m: Try[A]) 
     def getOrElse[B >: A](other: B): B = m match
@@ -38,7 +36,7 @@ object Ex6TryModel:
         case TryImpl.Success(value) => f(value)
         case TryImpl.Failure(exception) => TryImpl.Failure(exception)
       
-@main def main: Unit = 
+@main def main(): Unit = 
   import Ex6TryModel.*
 
   val result = for 
