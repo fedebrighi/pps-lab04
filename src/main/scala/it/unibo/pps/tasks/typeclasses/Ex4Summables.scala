@@ -35,7 +35,7 @@ object Ex4Summables:
     def zero: Double = 0.0
 
   given Summable[String] with
-    def sum(a1: String, a2: String): String = a1.concat(a2)
+    def sum(a1: String, a2: String): String = a1 + a2
     def zero: String = ""
 
   @main def trySummables =
