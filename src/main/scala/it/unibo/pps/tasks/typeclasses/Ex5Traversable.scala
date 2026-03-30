@@ -38,8 +38,7 @@ object Ex5Traversable:
     case _ => ()
 
   def generalizedLogAll[T[_]: Traversable, A](t: T[A])(f: A => Unit): Unit =
-    val traversable = summon[Traversable[T]]
-    traversable.traverse(t)(f)
+    summon[Traversable[T]].traverse(t)(f)
 
 @main def tryTraversables(): Unit =
   import Ex5Traversable.*
