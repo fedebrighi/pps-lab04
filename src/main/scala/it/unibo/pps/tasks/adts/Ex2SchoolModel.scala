@@ -132,22 +132,27 @@ object SchoolModel:
         case Cons(h, t) => Cons(h, filter(distinct(t)) (x => x != h))
         case Nil() => Nil()
 
-      def courses: Sequence[String] =
-        distinct(map(school.pairs) ((_, course) => course.name))
+      def courses: Sequence[String] = school match
+        case SchoolImpl(pairs) =>
+          distinct(map(pairs) (p => p match
+          case (_, CourseImpl(name)) => name))
 
-      def teachers: Sequence[String] =
-        distinct(map(school.pairs) ((teacher, _) => teacher.name))
+      def teachers: Sequence[String] = school match
+        case SchoolImpl(pairs) =>
+          distinct(map(pairs) (p => p match
+          case (TeacherImpl(name), _) => name))
 
-      def setTeacherToCourse(teacher: Teacher, course: Course): School =
-        SchoolImpl(Cons((teacher, course),school.pairs))
+      def setTeacherToCourse(teacher: Teacher, course: Course): School = school match
+        case SchoolImpl(pairs) => SchoolImpl(Cons((teacher, course), pairs))
 
-      def coursesOfATeacher(teacher: Teacher): Sequence[Course] =
-        map(filter(school.pairs) ((t, _) => t == teacher)) ((_, course) => course)
+      def coursesOfATeacher(teacher: Teacher): Sequence[Course] = school match
+        case SchoolImpl(pairs) => map(filter(pairs) ((t, _) => t == teacher)) ((_, course) => course)
 
-      def hasTeacher(name: String): Boolean =
-        filter(school.teachers)(x => x == name) match
-          case Nil() => false
-          case _ => true
+      def hasTeacher(name: String): Boolean = school match
+        case SchoolImpl(pairs) =>
+          filter(teachers)(x => x == name) match
+            case Nil() => false
+            case _ => true
 
       def hasCourse(name: String): Boolean =
         filter(school.courses) (x => x == name) match
